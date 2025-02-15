@@ -3,6 +3,16 @@
 ## Infrastructure Diagram
 ![Infra](infra.png)
 
+### Why Kubernetes?
+Kubernetes (EKS) has become the standard approach to run production workloads among multiple companies.
+
+In a given scenario, it provides simplicity of:
+- Deploying desired docker workloads `nginx:alpine`
+- Built-in operators into EKS provide an easy way of creating and managing AWS resources like: `ALB`, `ASG`, `SG`
+- Built-in Karpenter allows us to choose multiple flavours of instances for our workloads without manually creating a single node_group.
+
+Also, the company already utilizes Kubernetes, which should be a known solution for teams.
+
 ### Public Subnets
 To make the infrastructure more secure, public subnets host only `ALB`, `IGW`, and `NAT` resources.
 
@@ -39,6 +49,29 @@ service.yaml
 `nodepool.yaml` - is used to configure the nodepool that we will spin up for our workloads. We use `SPOT` instances in our demo.
 
 `service.yaml` - k8s resource that configures workload service.
+
+### Improvements
+1. Convert plain manifest to `HELM` charts for better flexibility of the workload deployments
+2. Add ability to configure other team members to access the cluster.
+3. Remove some static configurations from modules to be more flexible in resource namings
+
+```terraform
+#-----------------------------------------------------------------------------------------------------------------------
+# Ingress Info
+#-----------------------------------------------------------------------------------------------------------------------
+data "kubernetes_ingress_v1" "this" {
+  metadata {
+    name      = "hive-ingress"
+    namespace = "default"
+  }
+
+  depends_on = [
+    aws_eks_cluster.this,
+    kubectl_manifest.this["alb-ingress.yaml"]
+  ]
+}
+```
+4. Find and resolve racing conditions. Sometimes you need to re-apply the config.
 
 
 ## Quick Start
@@ -78,7 +111,9 @@ __Refer to the table below for available parameters.__
 Spinning up the entire infrastructure and deploying workloads could take over 10 minutes.
 When it's finished, you will get the public `ALB` endpoint that will deliver your requests to your workloads inside the Kubernetes cluster.
 
-`ffff`
+```
+ingress_address = "http://k8s-default-hiveingr-000000.us-east-1.elb.amazonaws.com"
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
