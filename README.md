@@ -1,9 +1,6 @@
 # terraform-example
 
-## Infrastructure Diagram
-![Infra](infra.png)
-
-### Why Kubernetes?
+## Why Kubernetes?
 Kubernetes (EKS) has become the standard approach to run production workloads among multiple companies.
 
 In a given scenario, it provides simplicity of:
@@ -12,6 +9,9 @@ In a given scenario, it provides simplicity of:
 - Built-in Karpenter allows us to choose multiple flavours of instances for our workloads without manually creating a single node_group.
 
 Also, the company already utilizes Kubernetes, which should be a known solution for teams.
+
+## Infrastructure Diagram
+![Infra](infra.png)
 
 ### Public Subnets
 To make the infrastructure more secure, public subnets host only `ALB`, `IGW`, and `NAT` resources.
@@ -50,7 +50,9 @@ service.yaml
 
 `service.yaml` - k8s resource that configures workload service.
 
-### Improvements
+---
+
+## Improvements
 1. Convert plain manifest to `HELM` charts for better flexibility of the workload deployments
 2. Add ability to configure other team members to access the cluster.
 3. Remove some static configurations from modules to be more flexible in resource namings
@@ -73,6 +75,7 @@ data "kubernetes_ingress_v1" "this" {
 ```
 4. Find and resolve racing conditions. Sometimes you need to re-apply the config.
 
+---
 
 ## Quick Start
 
