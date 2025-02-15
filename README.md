@@ -114,7 +114,12 @@ __Refer to the table below for available parameters.__
 Spinning up the entire infrastructure and deploying workloads could take over 10 minutes.
 When it's finished, you will get the public `ALB` endpoint that will deliver your requests to your workloads inside the Kubernetes cluster.
 
-```
+> [!WARNING]
+> 
+> It takes some time to provision the ALB. Go to the AWS console and wait till the ALB fully provisioned
+> before trying to access the ALB endpoint
+
+```text
 ingress_address = "http://k8s-default-hiveingr-000000.us-east-1.elb.amazonaws.com"
 ```
 
