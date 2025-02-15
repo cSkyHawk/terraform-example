@@ -116,7 +116,7 @@ When it's finished, you will get the public `ALB` endpoint that will deliver you
 
 > [!WARNING]
 > 
-> It takes some time to provision the ALB. Go to the AWS console and wait till the ALB fully provisioned
+> It takes some time to provision the ALB. Go to the AWS console and wait till the ALB is fully provisioned
 > before trying to access the ALB endpoint
 
 ```text
