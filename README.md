@@ -4,18 +4,22 @@
 ![Infra](infra.png)
 
 ### Public Subnets
-Public subnets are used to host only `ALB`, `IGW` and `NAT` resources to make the infrastructure more secure.
+To make the infrastructure more secure, public subnets host only `ALB`, `IGW`, and `NAT` resources.
 
 You can change public subnets settings by configuring this variable: `public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]`
 
 ### Private Subnets
-Private subnets are used to host EKS nodes and all our workloads. This is recommended way to host workloads for better security.
+Private subnets are used to host EKS nodes and our workloads. This is the recommended way to host workloads for better security.
 
 You can change private subnets settings by configuring this variable: `private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]`
 
+### Security Groups
+Because we are using the `EKS automode`, operator creates the ASG automatically and allows only traffic inside
+the K8S cluster and `HTTP` traffic from the `ALB`.
+
 ### Kubernetes manifests
-For a simplicity of this demo we are using plain Kubernetes manifests to deploy k8s resources.
-HELM charts would be a better way of deploying the workloads to the cluster.
+For the simplicity of this demo, we are using plain Kubernetes manifests to deploy k8s resources.
+`HELM` charts would be a better way of deploying the workloads to the cluster.
 
 You can find and adjust manifests in the `manifests` folder:
 
@@ -27,11 +31,12 @@ deployment.yaml
 nodepool.yaml
 service.yaml
 ```
+
 `alb-ingress-class-param.yaml` `alb-ingress-class.yaml` and `alb-ingress.yaml` configure ALB settings.
 
 `deployment.yaml` - is used to declare our deployment. You can change `image` or `replica` count in this file.
 
-`nodepool.yaml` - is used to configure nodepool that we will spin up for out workloads. We use `SPOT` instances in our demo.
+`nodepool.yaml` - is used to configure the nodepool that we will spin up for our workloads. We use `SPOT` instances in our demo.
 
 `service.yaml` - k8s resource that configures workload service.
 
@@ -64,13 +69,16 @@ tags = {
   "env" = "development"
 }
 ```
+__Refer to the table below for available parameters.__
 
 2. Make sure your AWS user is [authenticated](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-authentication.html) and has permissions to create resources.
 3. Init Terraform in the root of the git repository: `terraform init` 
 4. Apply configuration in the root of the module: `terraform apply`
 
-Please be patient it could take over 10 minutes to spin up the entire infrastructure and deploy workloads.
-In the end you will get the ALB endpoint that will deliver your requests to your workloads inside kubernetes cluster.
+Spinning up the entire infrastructure and deploying workloads could take over 10 minutes.
+When it's finished, you will get the public `ALB` endpoint that will deliver your requests to your workloads inside the Kubernetes cluster.
+
+`ffff`
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
