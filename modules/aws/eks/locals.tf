@@ -2,5 +2,5 @@
 # Locals
 #-----------------------------------------------------------------------------------------------------------------------
 locals {
-  manifests = fileset("${path.cwd}/manifests/", "*.yaml")
+  manifests = sort(fileset("${path.cwd}/manifests/", "*.yaml"))
 }

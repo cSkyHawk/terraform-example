@@ -158,11 +158,13 @@ resource "aws_eks_access_policy_association" "admin" {
 # Application Deployment
 #-----------------------------------------------------------------------------------------------------------------------
 resource "kubectl_manifest" "this" {
-  for_each = local.manifests
+  for_each = toset(local.manifests)
   yaml_body = try(file("${path.cwd}/manifests/${each.value}"), "")
 
   depends_on = [
-    aws_eks_cluster.this
+    aws_eks_cluster.this,
+    aws_eks_access_entry.admin,
+    aws_eks_access_policy_association.admin
   ]
 }
 
@@ -170,6 +172,10 @@ resource "kubectl_manifest" "this" {
 #-----------------------------------------------------------------------------------------------------------------------
 # Ingress Info
 #-----------------------------------------------------------------------------------------------------------------------
+resource "time_sleep" "wait_10_seconds" {
+  create_duration = "10s"
+}
+
 data "kubernetes_ingress_v1" "this" {
   metadata {
     name      = "hive-ingress"
@@ -177,7 +183,9 @@ data "kubernetes_ingress_v1" "this" {
   }
 
   depends_on = [
+    time_sleep.wait_10_seconds,
     aws_eks_cluster.this,
-    kubectl_manifest.this["alb-ingress.yaml"]
+    kubectl_manifest.this["06_alb-ingress.yaml"],
+    kubectl_manifest.this["03_deployment.yaml"]
   ]
 }

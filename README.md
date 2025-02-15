@@ -123,6 +123,28 @@ When it's finished, you will get the public `ALB` endpoint that will deliver you
 ingress_address = "http://k8s-default-hiveingr-000000.us-east-1.elb.amazonaws.com"
 ```
 
+## kubectl
+
+To get the kubeconfig: `aws eks update-kubeconfig --name <YOUUR_EKS_NAME> --region us-east-1`
+
+List pod:
+```shell
+k get pods
+
+NAME                    READY   STATUS    RESTARTS   AGE
+hive-67b8ff5c6f-2rl8m   1/1     Running   0          92s
+hive-67b8ff5c6f-8cfg6   1/1     Running   0          92s
+hive-67b8ff5c6f-wzqkx   1/1     Running   0          92s
+```
+
+List ingress:
+```shell
+k get ingress
+
+NAME           CLASS   HOSTS   ADDRESS                                                                  PORTS   AGE
+hive-ingress   alb     *       k8s-default-hiveingr-000.us-east-1.elb.amazonaws.com   80      3m31s
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
