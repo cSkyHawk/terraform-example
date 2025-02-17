@@ -73,7 +73,8 @@ data "kubernetes_ingress_v1" "this" {
   ]
 }
 ```
-4. Find and resolve racing conditions. Sometimes you need to re-apply the config.
+5. Find and resolve racing conditions. Sometimes you need to re-apply the config.
+6. Enable TLS support for the `HTTP` endpoints.
 
 ---
 
